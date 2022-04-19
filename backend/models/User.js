@@ -28,6 +28,10 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    city: {
+      type: String,
+      max: 50,
+    },
     followers: {
       type: Array,
       default: [],
@@ -44,10 +48,7 @@ const UserSchema = new mongoose.Schema(
       type: String,
       max: 50,
     },
-    city: {
-      type: String,
-      max: 50,
-    },
+
     from: {
       type: String,
       max: 50,

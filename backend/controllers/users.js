@@ -61,6 +61,24 @@ exports.getUser = (req, res, next) => {
       res.status(500).json(err);
     });
 };
+// get a user by username
+exports.getUserUsername = (req, res, next) => {
+  const username = req.query.username;
+
+  User.findOne({ username: username })
+    .then((user) => {
+      if (!user) {
+        console.log("No user found from getUser");
+      }
+      const { password, updatedAt, ...other } = user._doc;
+      // ._doc carries all the docs
+      res.status(200).json(other);
+    })
+    .catch((err) => {
+      console.log("getting user failed", err);
+      res.status(500).json(err);
+    });
+};
 
 // follow the user
 exports.putFollowUser = async (req, res, next) => {
@@ -107,5 +125,25 @@ exports.putUnfollow = async (req, res, next) => {
   } else {
     // same user
     res.status(403).json("You Cannot unFollow Yourself!");
+  }
+};
+
+exports.getFriends = async (req, res, next) => {
+  try {
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
+    const friends = await Promise.all(
+      user.followings.map((friendId) => {
+        return User.findById(friendId);
+      })
+    );
+    let friendList = [];
+    friends.map((friend) => {
+      const { _id, username, profilePicture } = friend;
+      friendList.push({ _id, username, profilePicture });
+    });
+    res.status(200).json(friendList);
+  } catch (err) {
+    res.status(500).json(err);
   }
 };

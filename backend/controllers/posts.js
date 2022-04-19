@@ -5,7 +5,13 @@ exports.getPosts = (req, res, next) => {
   console.log("post page");
 };
 exports.createPost = (req, res, next) => {
-  const newPost = new Post(req.body); // we pass everything that is required for a post
+  const newPost = new Post({
+    userId: req.body.userId,
+    description: req.body.description,
+    ...req.body,
+  }); // we pass everything that is required for a post
+  console.log(newPost);
+  console.log("Hellow");
   newPost
     .save()
     .then((post) => {
@@ -88,15 +94,35 @@ exports.getPost = (req, res, next) => {
 // Timeline posts
 exports.getTimelinePost = async (req, res, next) => {
   try {
-    const currentUser = await User.findById(req.body.userId);
+    const userId = req.params.userId;
+    const currentUser = await User.findById(userId);
     const userPosts = await Post.find({ userId: currentUser._id });
     const friendPosts = await Promise.all(
       currentUser.followings.map((friendId) => {
         return Post.find({ userId: friendId });
       })
     );
-    res.json(userPosts.concat(...friendPosts));
+    res.status(200).json(userPosts.concat(...friendPosts));
     // here what we do is for timeline. first we find the current user and get the posts of the current user. then we find the posts of the firedns of ours.
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+//get users post
+exports.getUserPost = async (req, res, next) => {
+  try {
+    let userPost;
+    const username = req.params.username;
+    const user = User.findOne({ username: username })
+      .then((result) => {
+        return Post.find({ userId: result.id });
+      })
+      .then((result) => {
+        res.status(200).json(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   } catch (err) {
     res.status(500).json(err);
   }

@@ -1,11 +1,18 @@
 import "./Topbar.css";
 import { Search, Person, Chat, Notifications } from "@mui/icons-material";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Topbar = () => {
+  const user = useSelector((state) => state.login.user);
+  const PublicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
+
   return (
     <div className="topbarContainer">
       <div className="topbarLeft">
-        <span className="logo">Facebook</span>
+        <Link to="/" style={{ textDecoration: "none" }}>
+          <span className="logo">Facebook</span>
+        </Link>
       </div>
       <div className="topbarCenter">
         <div className="searchbar">
@@ -36,7 +43,17 @@ const Topbar = () => {
             <span className="topbarIconBadge">1</span>
           </div>
         </div>
-        <img src="/assets/person/1.jpeg" alt="" className="topbarImg" />
+        <Link to={`/profile/${user?.username}`}>
+          <img
+            src={
+              user?.profilePicture
+                ? PublicFolder + user?.profilePicture
+                : PublicFolder + "person/noAvatar.png"
+            }
+            alt=""
+            className="topbarImg"
+          />
+        </Link>
       </div>
     </div>
   );

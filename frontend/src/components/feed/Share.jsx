@@ -1,25 +1,92 @@
 import "./Share.css";
-import { PermMedia, Label, Room, EmojiEmotions } from "@mui/icons-material";
+import {
+  PermMedia,
+  Label,
+  Room,
+  EmojiEmotions,
+  Cancel,
+} from "@mui/icons-material";
+import { useSelector, useDispatch } from "react-redux";
+import { useState } from "react";
+import { createPostAction } from "../../actions/createPostAction";
+import axios from "axios";
 
 const Share = () => {
+  const dispatch = useDispatch();
+  // const { posts, loading, error } = useSelector((state) => state.createPost);
+  const user = useSelector((state) => state.login.user);
+  const PublicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
+  const [description, setDescription] = useState("");
+  const [file, setFile] = useState(null);
+
+  const submitHandler = async (e) => {
+    console.log(description);
+    e.preventDefault();
+    const newPost = {
+      userId: user._id,
+      description: description,
+    };
+    if (file) {
+      const data = new FormData();
+      const filename = new Date().toISOString() + "-" + file.name;
+      data.append("file", file);
+      data.append("name", filename);
+      newPost.img = filename;
+      try {
+        await axios.post("http://localhost:8800/api/upload", data);
+      } catch (err) {}
+    }
+    dispatch(createPostAction(newPost));
+    window.location.reload();
+
+    setDescription("");
+  };
+
   return (
     <div className="share">
       <div className="shareWrapper">
         <div className="shareTop">
-          <img src="/assets/person/1.jpeg" className="shareProfileImg" alt="" />
+          <img
+            src={
+              user?.profilePicture
+                ? PublicFolder + user?.profilePicture
+                : PublicFolder + "person/noAvatar.png"
+            }
+            className="shareProfileImg"
+            alt=""
+          />
           <input
             type="text"
-            placeholder="What's on your mind, Sujan?"
+            placeholder={`What's on your mind, ${user.username}?`}
             className="shareInput"
+            value={description}
+            onChange={(e) => {
+              setDescription(e.target.value);
+            }}
           />
         </div>
         <hr className="shareHr" color="lightgrey" />
-        <div className="shareBottom">
+        {file && (
+          <div className="shareImageContainer">
+            <img src={URL.createObjectURL(file)} alt="" className="shareImg" />
+            <Cancel className="shareCancelImg" onClick={() => setFile(null)} />
+          </div>
+        )}
+        <form className="shareBottom" onSubmit={submitHandler}>
           <div className="shareOptions">
-            <div className="shareOption">
+            <label htmlFor="file" className="shareOption">
               <PermMedia htmlColor="#00A400" className="shareIcon" />
               <span className="shareOptionText">Photo or Video</span>
-            </div>
+              <input
+                style={{ display: "none" }}
+                type="file"
+                id="file"
+                accept=".png,.jpeg,.jpg,.svg"
+                onChange={(e) => {
+                  setFile(e.target.files[0]);
+                }}
+              />
+            </label>
             <div className="shareOption">
               <Label htmlColor="tomato" className="shareIcon" />
               <span className="shareOptionText">Tag</span>
@@ -33,8 +100,10 @@ const Share = () => {
               <span className="shareOptionText">Feelings</span>
             </div>
           </div>
-          <button className="shareButton">Share Now</button>
-        </div>
+          <button className="shareButton" type="submit">
+            Share Now
+          </button>
+        </form>
       </div>
     </div>
   );

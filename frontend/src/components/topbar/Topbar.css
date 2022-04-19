@@ -89,4 +89,5 @@
   height: 3.5rem;
   border-radius: 50%;
   object-fit: cover;
+  cursor: pointer;
 }

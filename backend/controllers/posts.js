@@ -5,6 +5,8 @@ exports.getPosts = (req, res, next) => {
   console.log("post page");
 };
 exports.createPost = (req, res, next) => {
+  console.log("front file", req.file);
+
   const newPost = new Post({
     userId: req.body.userId,
     description: req.body.description,
@@ -12,6 +14,7 @@ exports.createPost = (req, res, next) => {
   }); // we pass everything that is required for a post
   console.log(newPost);
   console.log("Hellow");
+
   newPost
     .save()
     .then((post) => {
@@ -28,11 +31,13 @@ exports.updatePost = async (req, res, next) => {
   try {
     const postId = req.params.id;
     const post = await Post.findById(postId);
-    if (post.userId === req.body.userId) {
+    console.log(req.body);
+    if (post.userId == req.body.userId) {
       await post.updateOne({ $set: req.body });
       res.status(200).json("The post has been updated!");
       //   this check does is, if userId of the post is equal to the id of the user that want to update the post
     } else {
+      console.log("u connot ");
       res.status(403).json("You cannot update other's post!");
     }
   } catch (err) {
@@ -51,6 +56,7 @@ exports.deletePost = async (req, res, next) => {
       res.status(200).json("The post has been deleted!");
       //   this check does is, if userId of the post is equal to the id of the user that want to update the post
     } else {
+      console.log("tour ganno");
       res.status(403).json("You cannot delete other's post!");
     }
   } catch (err) {

@@ -25,24 +25,27 @@ exports.postRegister = (req, res, next) => {
     .then((user) => {
       console.log("user registered successfully");
       // token generator
-      // let token;
-      // try {
-      //   token = jwt.sign(
-      //     {
-      //       userId: user._id,
-      //       email: user.email,
-      //     },
-      //     "secretkey_dont_share",
-      //     { expiresIn: "1h" }
-      //   );
+      let token;
+      try {
+        token = jwt.sign(
+          {
+            userId: user._id,
+            email: user.email,
+          },
+          "secretkey_dont_share",
+          { expiresIn: "1h" }
+        );
 
-      //   res.status(201).json({
-      //     message: "User Registered",
-      //     user: { ...user, token: token },
-      //   });
-      // } catch (err) {
-      //   console.log(err);
-      // }
+        // res.status(201).json({
+        //   message: "User Registered",
+        //   user: { ...user, token: token },
+        res.status(201).json({
+          user: user,
+          token: token,
+        });
+      } catch (err) {
+        console.log(err);
+      }
     })
     .catch((err) => {
       //   if (!err.statusCode) {
@@ -74,21 +77,24 @@ exports.postLogin = (req, res, next) => {
         res.status(400).json("Wrong Password");
       }
       // password success now creating a token
-      // let token;
-      // try {
-      //   token = jwt.sign(
-      //     {
-      //       userId: loadedUser._id,
-      //       email: loadedUser.email,
-      //     },
-      //     "secretkey_dont_share",
-      //     { expiresIn: "1h" }
-      //   );
-      // } catch (err) {
-      //   console.log(err);
-      // }
+      let token;
+      try {
+        token = jwt.sign(
+          {
+            userId: loadedUser._id,
+            email: loadedUser.email,
+          },
+          "secretkey_dont_share",
+          { expiresIn: "1h" }
+        );
+      } catch (err) {
+        console.log(err);
+      }
 
-      res.status(200).json(loadedUser);
+      res.status(200).json({
+        user: loadedUser,
+        token: token,
+      });
     })
     .catch((err) => {
       console.log("Error from login", err);

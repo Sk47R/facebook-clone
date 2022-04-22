@@ -12,17 +12,7 @@ import {
 
 const inititalState = {
   loading: false,
-  user: {
-    _id: "625af1a225bea36fc8b52e54",
-    username: "jane",
-    email: "jane@gmail.com",
-    password: "123456",
-    profilePicture: "person/1.jpeg",
-    coverPicture: "",
-    isAdmin: false,
-    followers: [],
-    followings: [],
-  },
+  user: {},
   error: null,
 };
 
@@ -32,6 +22,7 @@ const loginReducer = (state = inititalState, action) => {
       return { ...state, loading: true };
 
     case GET_LOGIN_USER_SUCCESS:
+      localStorage.setItem("userInfo", JSON.stringify(action.user));
       return { ...state, loading: false, user: action.user };
 
     case GET_LOGIN_USER_FAILURE:

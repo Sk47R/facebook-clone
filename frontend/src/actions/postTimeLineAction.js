@@ -5,7 +5,7 @@ import {
 } from "../constants";
 import axios from "axios";
 
-export const getTimelinePost = (userId) => {
+export const getTimelinePost = (userId, token) => {
   // 625af1a225bea36fc8b52e54
   return (dispatch) => {
     dispatch({ type: GET_TIMELINE_POST_BEGIN });
@@ -14,8 +14,9 @@ export const getTimelinePost = (userId) => {
     return axios({
       url: apiUrl,
       method: "GET",
-      header: {
+      headers: {
         Accept: "application/json",
+        Authorization: "Bearer " + token,
       },
     })
       .then((response) => {

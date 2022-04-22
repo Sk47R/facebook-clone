@@ -1,5 +1,5 @@
 import "./Login.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginAction } from "../../actions/loginAction";
 import Loader from "react-js-loader";
@@ -11,11 +11,19 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const { user, error, loading } = useSelector((state) => state.login);
+
+  useEffect(() => {
+    const token = localStorage.getItem("userInfo");
+    if (token) {
+      console.log("nacigated");
+      navigate("/");
+    }
+  }, [navigate]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(email, password);
 
-    dispatch(loginAction(email, password));
+    dispatch(loginAction(email, password, navigate));
     navigate("/");
     setEmail("");
     setPassword("");

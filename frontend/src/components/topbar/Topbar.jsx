@@ -1,11 +1,22 @@
 import "./Topbar.css";
 import { Search, Person, Chat, Notifications } from "@mui/icons-material";
+import LogoutIcon from "@mui/icons-material/Logout";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import useTokenAndId from "../tokenFetch";
 
 const Topbar = () => {
-  const user = useSelector((state) => state.login.user);
+  const navigate = useNavigate();
+  const { user } = useTokenAndId();
+
   const PublicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
+
+  const logOutHandler = () => {
+    localStorage.clear();
+    navigate("/login");
+    window.location.reload();
+  };
 
   return (
     <div className="topbarContainer">
@@ -41,6 +52,9 @@ const Topbar = () => {
           <div className="topbarIconItem">
             <Notifications className="navIcons" />
             <span className="topbarIconBadge">1</span>
+          </div>
+          <div className="topbarIconItem">
+            <LogoutIcon className="navIcons" onClick={logOutHandler} />
           </div>
         </div>
         <Link to={`/profile/${user?.username}`}>

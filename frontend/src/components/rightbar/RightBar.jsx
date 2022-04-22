@@ -8,12 +8,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { Add, Remove } from "@mui/icons-material";
 import { followFriendAction } from "../../actions/followUnfollow";
 import { unFollowFriendAction } from "../../actions/followUnfollow";
+import useTokenAndId from "../tokenFetch";
 
 const RightBar = ({ user }) => {
   const dispatch = useDispatch();
   const PublicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
   const [friends, setFriends] = useState([]);
-  const loggedUser = useSelector((state) => state.login.user);
+  const { user: loggedUser } = useTokenAndId();
+
   const [followed, setFollowed] = useState(
     loggedUser?.followings?.includes(user?._id)
   );

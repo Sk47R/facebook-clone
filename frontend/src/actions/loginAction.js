@@ -5,7 +5,7 @@ import {
 } from "../constants";
 import axios from "axios";
 
-export const loginAction = (email, password) => {
+export const loginAction = (email, password, navigate) => {
   // 625af1a225bea36fc8b52e54
   return (dispatch) => {
     dispatch({ type: GET_LOGIN_USER_BEGIN });
@@ -17,6 +17,7 @@ export const loginAction = (email, password) => {
         if (response.status == 200) {
           console.log("login success");
           dispatch({ type: GET_LOGIN_USER_SUCCESS, user: response.data });
+          navigate("/");
         } else {
           dispatch({ type: GET_LOGIN_USER_FAILURE, error: response.data });
         }

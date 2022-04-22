@@ -10,17 +10,19 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import { createPostAction } from "../../actions/createPostAction";
 import axios from "axios";
+import useTokenAndId from "../tokenFetch";
 
 const Share = () => {
   const dispatch = useDispatch();
   // const { posts, loading, error } = useSelector((state) => state.createPost);
-  const user = useSelector((state) => state.login.user);
+
+  const { user } = useTokenAndId();
+
   const PublicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
   const [description, setDescription] = useState("");
   const [file, setFile] = useState(null);
 
   const submitHandler = async (e) => {
-    console.log(description);
     e.preventDefault();
     const newPost = {
       userId: user._id,
@@ -37,7 +39,7 @@ const Share = () => {
       } catch (err) {}
     }
     dispatch(createPostAction(newPost));
-    window.location.reload();
+    // window.location.reload();
 
     setDescription("");
   };
@@ -81,6 +83,7 @@ const Share = () => {
                 style={{ display: "none" }}
                 type="file"
                 id="file"
+                name="file"
                 accept=".png,.jpeg,.jpg,.svg"
                 onChange={(e) => {
                   setFile(e.target.files[0]);

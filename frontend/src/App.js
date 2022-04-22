@@ -3,24 +3,27 @@ import Profile from "./pages/profile/Profile";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
+import useTokenAndId from "./components/tokenFetch";
 
-import { useSelector } from "react-redux";
-import { Provider } from "react-redux";
-import store from "./store";
+import { BrowserRouter } from "react-router-dom";
+import { useState } from "react";
 
 function App() {
-  let navigate = useNavigate();
-
+  const { token } = useTokenAndId();
+  console.log(token);
   return (
     <div>
-      <Provider store={store}>
+      <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={token ? <Home /> : <Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/profile/:username" element={<Profile />} />
+          <Route
+            path="/profile/:username"
+            element={token ? <Profile /> : <Login />}
+          />
         </Routes>
-      </Provider>
+      </BrowserRouter>
     </div>
   );
 }

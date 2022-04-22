@@ -9,7 +9,7 @@ import axios from "axios";
 export const createPostAction = (newPost) => {
   return (dispatch) => {
     dispatch({ type: GET_CREATE_POST_BEGIN });
-    const apiUrl = `http://localhost:8800/api/posts`;
+    const apiUrl = `http://localhost:8800/api/posts/`;
 
     axios
       .post(apiUrl, newPost)

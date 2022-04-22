@@ -7,12 +7,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getUserUsernameAction } from "../../actions/userUserNameAction";
 import { useParams } from "react-router-dom";
+import useTokenAndId from "../../components/tokenFetch";
 const Profile = () => {
   const PublicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
   const dispatch = useDispatch();
   const { username } = useParams();
   const user = useSelector((state) => state.user.user);
-  const loggedUser = useSelector((state) => state.login.user);
+  const { user: loggedUser } = useTokenAndId();
 
   useEffect(() => {
     dispatch(getUserUsernameAction(username));

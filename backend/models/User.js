@@ -59,6 +59,12 @@ const UserSchema = new mongoose.Schema(
       enum: [1, 2, 3],
       //   single, married, complecated
     },
+    posts: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Post",
+      },
+    ],
   },
   { timestamps: true }
 );

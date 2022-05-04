@@ -31,7 +31,6 @@ const ChatOnline = ({ onlineUsers, currentId, setCurrentChat }) => {
       friends.filter((friend) => onlineUsers.includes(friend._id))
     );
   }, [friends, onlineUsers]);
-  console.log(onlineFriends);
 
   const handleClick = async (user) => {
     try {

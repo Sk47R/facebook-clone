@@ -132,7 +132,7 @@ const Messenger = () => {
             {loadingConversations ? (
               <h1>Loading...</h1>
             ) : (
-              conversations.map((conversation) => {
+              conversations.map((conversation, index) => {
                 return (
                   <div onClick={() => setCurrentChat(conversation)}>
                     <Conversation

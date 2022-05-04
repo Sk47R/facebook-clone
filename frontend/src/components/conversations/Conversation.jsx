@@ -17,8 +17,8 @@ const Conversation = ({ conversation }) => {
       (member) => member !== currentUser._id
     );
     dispatch(getUserAction(friendId, token));
-  }, []);
-
+  }, [currentUser._id]);
+  console.log(userFriend.username);
   return loading ? (
     <h2>lOading...</h2>
   ) : (

@@ -36,7 +36,7 @@ const Post = ({ post, username }) => {
 
   useEffect(() => {
     dispatch(getUserAction(post.userId));
-  }, [post.userId]);
+  }, [post]);
 
   const likeHandler = () => {
     dispatch(likeAction(post._id, user?._id));
@@ -237,11 +237,11 @@ const Post = ({ post, username }) => {
       <div className="postWrapper">
         <div className="postTop">
           <div className="postTopLeft">
-            <Link to={`/profile/${user.username}`}>
+            <Link to={`/profile/${post?.creator?.username}`}>
               <img
                 src={
-                  user?.profilePicture
-                    ? PublicFolder + user?.profilePicture
+                  post?.creator?.profilePicture
+                    ? PublicFolder + post?.creator?.profilePicture
                     : PublicFolder + "person/noAvatar.png"
                 }
                 className="postProfileImg"
@@ -249,7 +249,7 @@ const Post = ({ post, username }) => {
               />
             </Link>
             <div className="postTopLeftName">
-              <span className="postUsername">{postUser?.username}</span>
+              <span className="postUsername">{post?.creator?.username}</span>
               <span className="postDate">{format(post.createdAt)}</span>
             </div>
           </div>

@@ -12,14 +12,6 @@ const Login = () => {
   const dispatch = useDispatch();
   const { user, error, loading } = useSelector((state) => state.login);
 
-  useEffect(() => {
-    const token = localStorage.getItem("userInfo");
-    if (token) {
-      console.log("nacigated");
-      navigate("/");
-    }
-  }, [navigate]);
-
   const handleSubmit = (e) => {
     e.preventDefault();
 

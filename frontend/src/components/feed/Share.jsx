@@ -16,7 +16,7 @@ const Share = () => {
   const dispatch = useDispatch();
   // const { posts, loading, error } = useSelector((state) => state.createPost);
 
-  const { user } = useTokenAndId();
+  const { user, token } = useTokenAndId();
 
   const PublicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
   const [description, setDescription] = useState("");
@@ -27,19 +27,11 @@ const Share = () => {
     const newPost = {
       userId: user._id,
       description: description,
+      image: file,
     };
-    if (file) {
-      const data = new FormData();
-      const filename = new Date().toISOString() + "-" + file.name;
-      data.append("file", file);
-      data.append("name", filename);
-      newPost.img = filename;
-      try {
-        await axios.post("http://localhost:8800/api/upload", data);
-      } catch (err) {}
-    }
-    dispatch(createPostAction(newPost));
-    // window.location.reload();
+
+    dispatch(createPostAction(newPost, token));
+    window.location.reload();
 
     setDescription("");
   };

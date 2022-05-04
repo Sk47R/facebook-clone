@@ -167,13 +167,18 @@
 
 .EditModal__Top__Content__Image {
   width: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  height: 10rem;
+}
+.container {
+  overflow-y: scroll;
+  height: fit-content;
 }
 .EditModal__Close__Image {
   position: absolute;
-  top: 11rem;
-  right: 3rem;
-  color: white;
+  top: 10rem;
+  right: 2rem;
+  color: black;
   font-size: 3rem !important;
   cursor: pointer;
 }

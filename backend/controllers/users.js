@@ -1,10 +1,6 @@
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 
-exports.getIndex = (req, res, next) => {
-  res.send("Hey its user root");
-};
-
 // update user
 exports.putUpdateUser = async (req, res, next) => {
   const userId = req.body.userId;
@@ -64,6 +60,8 @@ exports.getUser = (req, res, next) => {
 // get a user by username
 exports.getUserUsername = (req, res, next) => {
   const username = req.query.username;
+  console.log(username);
+  console.log("here");
 
   User.findOne({ username: username })
     .then((user) => {
@@ -84,8 +82,10 @@ exports.getUserUsername = (req, res, next) => {
 exports.putFollowUser = async (req, res, next) => {
   const userId = req.params.id;
   if (req.body.userId !== userId) {
+    console.log(userId);
     try {
       const user = await User.findById(userId); // user we are trying to follow
+      console.log("helloagain4");
       const currentUser = await User.findById(req.body.userId);
       if (!user.followers.includes(req.body.userId)) {
         await user.updateOne({ $push: { followers: req.body.userId } });

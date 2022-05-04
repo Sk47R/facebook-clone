@@ -17,7 +17,6 @@ module.exports = (req, res, next) => {
   //   here we did a split because the token has baerer in front when we made the header in the front end.
 
   //// Now decode token
-
   let decodedToken;
   try {
     decodedToken = jwt.verify(token, "secretkey_dont_share");

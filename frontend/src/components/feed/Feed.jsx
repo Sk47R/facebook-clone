@@ -2,20 +2,18 @@ import "./Feed.css";
 import Share from "./Share";
 import Post from "./Post";
 import { Posts } from "../../dummyData";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getTimelinePost } from "../../actions/postTimeLineAction";
 import { getUserPostAction } from "../../actions/userPostAction";
 import useTokenAndId from "../tokenFetch";
 
 const Feed = ({ username }) => {
-  const [posts, setPosts] = useState([]);
   const { token } = useTokenAndId();
   const dispatch = useDispatch();
   const timelinePost = useSelector((state) => state.timelinePost.posts);
   // const user = useSelector((state) => state.login.user);
   const userPosts = useSelector((state) => state.userPost.userPosts);
-
   const { user } = useTokenAndId();
   useEffect(() => {
     dispatch(getTimelinePost(user?._id, token));

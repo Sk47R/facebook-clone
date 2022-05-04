@@ -8,6 +8,8 @@ import loginReducer from "./reducers/loginReducer";
 import registerReducer from "./reducers/registerReducer";
 import likeReducer from "./reducers/likeReducer";
 import createPostReducer from "./reducers/createPost";
+import getConversationReducer from "./reducers/getConversationReducer";
+import getMessageReducer from "./reducers/getMessageReducer";
 
 const rootReducer = combineReducers({
   timelinePost: timelinePostReducer,
@@ -18,6 +20,8 @@ const rootReducer = combineReducers({
   register: registerReducer,
   likes: likeReducer,
   createPost: createPostReducer,
+  conversations: getConversationReducer,
+  messages: getMessageReducer,
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk));

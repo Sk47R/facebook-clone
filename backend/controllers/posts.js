@@ -1,19 +1,23 @@
 const Post = require("../models/Post");
 const User = require("../models/User");
-
+const fs = require("fs");
+const path = require("path");
 exports.getPosts = (req, res, next) => {
   console.log("post page");
 };
 exports.createPost = (req, res, next) => {
-  console.log("front file", req.file);
+  if (!req.file) {
+    console.log("no file provided");
+  }
+  const imgUrl = req.file.path.split("/")[2];
 
   const newPost = new Post({
     userId: req.body.userId,
     description: req.body.description,
+    img: imgUrl,
+    creator: req.userId,
     ...req.body,
   }); // we pass everything that is required for a post
-  console.log(newPost);
-  console.log("Hellow");
 
   newPost
     .save()
@@ -29,18 +33,35 @@ exports.createPost = (req, res, next) => {
 
 exports.updatePost = async (req, res, next) => {
   try {
+    console.log("update post");
     const postId = req.params.id;
+    let imageUrl = req.body.image;
+    console.log(req.file);
+    if (req.file) {
+      imageUrl = req.file.path.split("/")[2];
+    }
+    console.log(imageUrl);
+    if (!imageUrl) {
+      console.log("no file");
+    }
     const post = await Post.findById(postId);
-    console.log(req.body);
+    let postImg = post.img;
+    console.log("here");
     if (post.userId == req.body.userId) {
-      await post.updateOne({ $set: req.body });
+      await post.updateOne({ $set: { ...req.body, img: imageUrl } });
       res.status(200).json("The post has been updated!");
+      if (imageUrl !== postImg) {
+        // we uploaded a new file
+        clearImage(postImg);
+      }
+      console.log("update successfull");
       //   this check does is, if userId of the post is equal to the id of the user that want to update the post
     } else {
       console.log("u connot ");
       res.status(403).json("You cannot update other's post!");
     }
   } catch (err) {
+    console.log("error");
     res.status(500).json(err);
   }
 };
@@ -53,6 +74,7 @@ exports.deletePost = async (req, res, next) => {
     const post = await Post.findById(postId);
     if (post.userId === req.body.userId) {
       await post.deleteOne();
+      clearImage(post.img);
       res.status(200).json("The post has been deleted!");
       //   this check does is, if userId of the post is equal to the id of the user that want to update the post
     } else {
@@ -132,4 +154,9 @@ exports.getUserPost = async (req, res, next) => {
   } catch (err) {
     res.status(500).json(err);
   }
+};
+
+const clearImage = (filePath) => {
+  filePath = path.join(__dirname, "..", "public", "images", filePath);
+  fs.unlink(filePath, (err) => console.log(err));
 };

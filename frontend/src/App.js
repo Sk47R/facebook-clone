@@ -2,26 +2,34 @@ import Home from "./pages/home/Home";
 import Profile from "./pages/profile/Profile";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
-import { Routes, Route, Link, useNavigate } from "react-router-dom";
+import { Routes, Route, Link, useNavigate, Navigate } from "react-router-dom";
 import useTokenAndId from "./components/tokenFetch";
 
 import { BrowserRouter } from "react-router-dom";
-import { useState } from "react";
+import Messenger from "./pages/messenger/Messenger";
 
 function App() {
+  console.log("render");
   const { token } = useTokenAndId();
-  console.log(token);
   return (
     <div>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={token ? <Home /> : <Login />} />
-          <Route path="/login" element={<Login />} />
+          <Route index path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route
+            path="/"
+            element={!token ? <Navigate to="/login" /> : <Home />}
+          />
+
           <Route
             path="/profile/:username"
             element={token ? <Profile /> : <Login />}
           />
+          <Route
+            path="/messenger"
+            element={!token ? <Navigate to="/login" /> : <Messenger />}
+          ></Route>
         </Routes>
       </BrowserRouter>
     </div>

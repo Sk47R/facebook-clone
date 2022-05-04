@@ -1,0 +1,64 @@
+.messenger {
+  height: calc(100vh - 5rem);
+  display: flex;
+}
+.messengerLeft {
+  flex: 3.5;
+}
+.messengerLeftWrapper__Input {
+  width: 90%;
+  padding: 1rem 0;
+  border: none;
+  border-bottom: 1px solid gray;
+  font-size: 1.2rem;
+}
+.messengerCenter {
+  flex: 5.5;
+}
+.messengerCenterWrapper {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.messengerCenterWrapperTop {
+  height: 100%;
+  overflow-y: scroll;
+  padding: 0rem 1rem;
+}
+.messengerCenterWrapperBottom {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.chatMessageInput {
+  width: 80%;
+  height: 5rem;
+  padding: 1rem;
+}
+.chatSubmitButton {
+  width: 7rem;
+  height: 4rem;
+  border: none;
+  border-radius: 5px;
+  background-color: teal;
+  color: white;
+}
+.messengerRight {
+  flex: 3;
+}
+.messengerLeftWrapper,
+.messengerCenterWrapper,
+.messengerRightWrapper,
+.messengerCenterWrapper {
+  height: 96%;
+  padding: 1rem;
+}
+
+.noConversationText {
+  position: absolute;
+  top: 10%;
+  font-size: 5rem;
+  color: rgb(148, 148, 148);
+  cursor: default;
+}

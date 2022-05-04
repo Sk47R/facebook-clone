@@ -14,22 +14,22 @@ const RightBar = ({ user }) => {
   const dispatch = useDispatch();
   const PublicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
   const [friends, setFriends] = useState([]);
-  const { user: loggedUser } = useTokenAndId();
+  const { user: loggedUser } = JSON.parse(localStorage.getItem("userInfo"));
 
   const [followed, setFollowed] = useState(
     loggedUser?.followings?.includes(user?._id)
   );
   useEffect(() => {
     setFollowed(loggedUser?.followings?.includes(user?._id));
-  }, [user?._id]);
+  }, [user?._id, dispatch]);
 
   useEffect(() => {
-    const getFriends = async () => {
+    const getFriends = async (userID) => {
       try {
         let friendList;
 
         friendList = await axios.get(
-          `http://localhost:8800/api/users/friends/${user?._id}`
+          `http://localhost:8800/api/users/friends/${userID}`
         );
 
         setFriends(friendList.data);
@@ -39,12 +39,13 @@ const RightBar = ({ user }) => {
       }
     };
     if (user) {
-      getFriends();
+      getFriends(user._id);
     }
   }, [user]);
 
   const followHandler = async () => {
     try {
+      console.log(user._id);
       if (followed) {
         await axios.put(
           `http://localhost:8800/api/users/${user._id}/unfollow`,
@@ -52,14 +53,13 @@ const RightBar = ({ user }) => {
             userId: loggedUser._id,
           }
         );
-        dispatch(unFollowFriendAction(user._id));
+        dispatch(unFollowFriendAction(user._id, setFollowed));
       } else {
         await axios.put(`http://localhost:8800/api/users/${user._id}/follow`, {
           userId: loggedUser._id,
         });
-        dispatch(followFriendAction(user._id));
+        dispatch(followFriendAction(user._id, setFollowed));
       }
-      setFollowed(!followed);
     } catch (err) {
       console.log(err);
     }
@@ -87,7 +87,6 @@ const RightBar = ({ user }) => {
       </>
     );
   };
-
   const ProfileRightBar = () => {
     return (
       <>

@@ -18,6 +18,7 @@ export const loginAction = (email, password, navigate) => {
           console.log("login success");
           dispatch({ type: GET_LOGIN_USER_SUCCESS, user: response.data });
           navigate("/");
+          window.location.reload();
         } else {
           dispatch({ type: GET_LOGIN_USER_FAILURE, error: response.data });
         }

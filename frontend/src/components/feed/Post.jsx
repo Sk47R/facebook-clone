@@ -22,6 +22,7 @@ const Post = ({ post, username }) => {
   const [like, setLike] = useState(post.likes.length);
   const [isLiked, setIsLiked] = useState(false);
   const [editModal, setEditModal] = useState(false);
+  const postUser = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
   const [updatePost, setUpdatePost] = useState({});
   const [file, setFile] = useState(null);
@@ -61,6 +62,7 @@ const Post = ({ post, username }) => {
   };
   const closeEdit = () => {
     setEditModal(false);
+    setFile(null);
   };
   const deletePostHandler = (postId) => {
     axios
@@ -83,31 +85,15 @@ const Post = ({ post, username }) => {
     window.location.reload();
   };
 
-  const submitHandler = async (postId) => {
-    const updatePost = {
-      description: description.current.value,
-      userId: user._id,
-    };
-    let data;
-    if (file) {
-      data = new FormData();
-      const filename = new Date().toISOString() + "-" + file.name;
-      data.append("file", file);
-      data.append("name", filename);
-      updatePost.img = filename;
-      try {
-        await axios.post("http://localhost:8800/api/upload", data, {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        });
-      } catch (err) {
-        console.log("file upload error");
-      }
-    }
-
+  const submitHandler = (postId) => {
+    const userId = user._id;
+    const updatedDescription = description.current.value;
+    const formData = new FormData();
+    formData.append("userId", userId);
+    formData.append("description", updatedDescription);
+    formData.append("image", file ? file : updatePost.img);
     axios
-      .put(`http://localhost:8800/api/posts/${postId}`, updatePost, {
+      .put(`http://localhost:8800/api/posts/${postId}`, formData, {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -183,57 +169,66 @@ const Post = ({ post, username }) => {
   const EditModal = () => {
     return (
       <Modal onClick={closeEdit}>
-        <form
-          className="EditModal"
-          onClick={() => {
-            submitHandler(post._id);
-          }}
-        >
+        <div className="EditModal">
           <CloseIcon onClick={closeEdit} className="EditModal__Close" />
-          <CloseIcon className="EditModal__Close__Image" />
+          {/* <CloseIcon
+            className="EditModal__Close__Image"
+            onClick={setFile(null)}
+          /> */}
           <div className="EditModal__Top">
             <h3>Edit Post</h3>
           </div>
-          <div className="EditModal__Top__Content">
-            <input
-              className="EditModal__Top__Content__Input"
-              type="text"
-              defaultValue={updatePost.description}
-              ref={description}
-            />
+          <div className="container">
+            <form
+              onSubmit={() => {
+                submitHandler(post._id);
+              }}
+            >
+              <div className="EditModal__Top__Content">
+                <input
+                  className="EditModal__Top__Content__Input"
+                  type="text"
+                  defaultValue={updatePost.description}
+                  ref={description}
+                />
+              </div>
+              <div className="Edit_Image">
+                <img
+                  className="EditModal__Top__Content__Image"
+                  src={
+                    file
+                      ? URL.createObjectURL(file)
+                      : PublicFolder + updatePost.img
+                  }
+                  style={{ marginBottom: "1rem" }}
+                  alt="No image selected"
+                />
+                <label htmlFor="file" className="shareOption">
+                  <PermMedia htmlColor="#00A400" className="shareIcon" />
+                  <span className="shareOptionText">Photo or Video</span>
+                  <input
+                    style={{ display: "none" }}
+                    type="file"
+                    id="file"
+                    name="file"
+                    accept=".png,.jpeg,.jpg,.svg"
+                    onChange={(e) => {
+                      setFile(e.target.files[0]);
+                    }}
+                  />
+                </label>
+              </div>
+              <div className="Edit__Button">
+                <button type="submit" className="Edit__Button__Btn">
+                  Edit
+                </button>
+              </div>
+            </form>
           </div>
-          <div className="Edit_Image">
-            <img
-              className="EditModal__Top__Content__Image"
-              src={
-                file ? URL.createObjectURL(file) : PublicFolder + updatePost.img
-              }
-              alt=""
-            />
-            <label htmlFor="file" className="shareOption">
-              <PermMedia htmlColor="#00A400" className="shareIcon" />
-              <span className="shareOptionText">Photo or Video</span>
-              <input
-                style={{ display: "none" }}
-                type="file"
-                id="file"
-                accept=".png,.jpeg,.jpg,.svg"
-                onChange={(e) => {
-                  setFile(e.target.files[0]);
-                }}
-              />
-            </label>
-          </div>
-          <div className="Edit__Button">
-            <button type="button" className="Edit__Button__Btn">
-              Edit
-            </button>
-          </div>
-        </form>
+        </div>
       </Modal>
     );
   };
-
   return (
     <div className="post">
       {editModal && <EditModal />}
@@ -254,7 +249,7 @@ const Post = ({ post, username }) => {
               />
             </Link>
             <div className="postTopLeftName">
-              <span className="postUsername">{user.username}</span>
+              <span className="postUsername">{postUser?.username}</span>
               <span className="postDate">{format(post.createdAt)}</span>
             </div>
           </div>
@@ -271,6 +266,7 @@ const Post = ({ post, username }) => {
           <span className="postText">{post?.description}</span>
           {/* conditional rendering */}
           <img className="postImage" src={PublicFolder + post?.img} alt="" />
+          {/* <img className="postImage" src={PublicFolder + post?.img} alt="" /> */}
         </div>
 
         <div className="postBottom">

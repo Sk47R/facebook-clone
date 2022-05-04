@@ -6,7 +6,7 @@ import {
 
 import axios from "axios";
 
-export const getUserAction = (userId) => {
+export const getUserAction = (userId, token) => {
   // 625af1a225bea36fc8b52e54
   return (dispatch) => {
     dispatch({ type: GET_USER_BEGIN });
@@ -15,8 +15,9 @@ export const getUserAction = (userId) => {
     return axios({
       url: apiUrl,
       method: "GET",
-      header: {
+      headers: {
         Accept: "application/json",
+        Authorization: "Bearer " + token,
       },
     })
       .then((response) => {

@@ -6,16 +6,16 @@ exports.getPosts = (req, res, next) => {
   console.log("post page");
 };
 exports.createPost = (req, res, next) => {
+  console.log("yo");
   if (!req.file) {
     console.log("no file provided");
   }
-  const imgUrl = req.file.path.split("/")[2];
+  const imgUrl = req.file?.path.split("/")[2];
 
   const newPost = new Post({
     userId: req.body.userId,
     description: req.body.description,
     img: imgUrl,
-    creator: req.userId,
     ...req.body,
   }); // we pass everything that is required for a post
 

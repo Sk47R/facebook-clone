@@ -6,7 +6,8 @@ import {
 
 import axios from "axios";
 
-export const createPostAction = ({ userId, description, image }) => {
+export const createPostAction = ({ userId, description, image }, token) => {
+  console.log(token);
   return (dispatch) => {
     dispatch({ type: GET_CREATE_POST_BEGIN });
     const formData = new FormData();
@@ -16,8 +17,12 @@ export const createPostAction = ({ userId, description, image }) => {
 
     const apiUrl = `http://localhost:8800/api/posts/`;
 
-    axios
-      .post(apiUrl, formData)
+    return axios
+      .post(apiUrl, formData, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
       .then((response) => {
         console.log("then");
         if (response.status == 200) {

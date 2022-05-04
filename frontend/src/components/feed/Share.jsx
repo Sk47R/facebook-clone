@@ -31,7 +31,7 @@ const Share = () => {
     };
 
     dispatch(createPostAction(newPost, token));
-    window.location.reload();
+    // window.location.reload();
 
     setDescription("");
   };

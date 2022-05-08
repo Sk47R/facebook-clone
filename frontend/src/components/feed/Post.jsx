@@ -232,7 +232,12 @@ const Post = ({ post, username }) => {
   return (
     <div className="post">
       {editModal && <EditModal />}
-      {openMore && (username ? <ProfileModal /> : <TimelineModal />)}
+      {openMore &&
+        (username && username == user.username ? (
+          <ProfileModal />
+        ) : (
+          <TimelineModal />
+        ))}
 
       <div className="postWrapper">
         <div className="postTop">

@@ -7,9 +7,9 @@
   justify-content: center;
 }
 
-.loginWrapper {
+.registerWrapper {
   width: 70%;
-  height: 70%;
+  height: 98%;
   display: flex;
 }
 
@@ -31,8 +31,8 @@
 .loginDesc {
   font-size: 2.4rem;
 }
-.loginBox {
-  height: 40rem;
+.registerBox {
+  height: 75rem;
   padding: 2rem;
   background-color: white;
   border-radius: 1rem;

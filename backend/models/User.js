@@ -50,11 +50,11 @@ const UserSchema = new mongoose.Schema(
       max: 50,
     },
 
-    from: {
+    location: {
       type: String,
       max: 50,
     },
-    relationship: {
+    relation: {
       type: Number,
       enum: [1, 2, 3],
       //   single, married, complecated

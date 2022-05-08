@@ -5,7 +5,13 @@ import {
 } from "../constants";
 import axios from "axios";
 
-export const loginAction = (email, password, navigate) => {
+export const loginAction = (
+  email,
+  password,
+  navigate,
+  setEmail,
+  setPassword
+) => {
   // 625af1a225bea36fc8b52e54
   return (dispatch) => {
     dispatch({ type: GET_LOGIN_USER_BEGIN });
@@ -17,6 +23,8 @@ export const loginAction = (email, password, navigate) => {
         if (response.status == 200) {
           console.log("login success");
           dispatch({ type: GET_LOGIN_USER_SUCCESS, user: response.data });
+          setEmail("");
+          setPassword("");
           navigate("/");
           window.location.reload();
         } else {
@@ -24,7 +32,7 @@ export const loginAction = (email, password, navigate) => {
         }
       })
       .catch((err) => {
-        dispatch({ type: GET_LOGIN_USER_FAILURE, error: err });
+        dispatch({ type: GET_LOGIN_USER_FAILURE, error: err.response.data });
       });
   };
 };

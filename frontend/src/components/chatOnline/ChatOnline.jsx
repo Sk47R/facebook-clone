@@ -45,6 +45,7 @@ const ChatOnline = ({ onlineUsers, currentId, setCurrentChat }) => {
 
   return (
     <div className="chatOnline">
+      <h1 className="chatOnlineHeader">Active</h1>
       {onlineFriends.map((friend) => (
         <div
           className="chatOnlineFriend"
@@ -64,7 +65,7 @@ const ChatOnline = ({ onlineUsers, currentId, setCurrentChat }) => {
             />
             <div className="chatOnlineBadge"></div>
           </div>
-          <span className="chatOnlineName">John Doe</span>
+          <span className="chatOnlineName">{friend.username}</span>
         </div>
       ))}
     </div>

@@ -3,7 +3,13 @@
   display: flex;
 }
 .messengerLeft {
-  flex: 3.5;
+  flex: 2.5;
+  border-right: 2px solid lightgrey;
+}
+.messengerLeftWrapper__Header {
+  font-size: 2.2rem;
+  border-bottom: 2px solid lightgrey;
+  padding-bottom: 1rem;
 }
 .messengerLeftWrapper__Input {
   width: 90%;
@@ -14,6 +20,7 @@
 }
 .messengerCenter {
   flex: 5.5;
+  border-right: 2px solid lightgrey;
 }
 .messengerCenterWrapper {
   display: flex;
@@ -35,8 +42,10 @@
   width: 80%;
   height: 5rem;
   padding: 1rem;
+  font-size: 1.6rem;
 }
 .chatSubmitButton {
+  font-size: 1.6rem;
   width: 7rem;
   height: 4rem;
   border: none;
@@ -61,4 +70,8 @@
   font-size: 5rem;
   color: rgb(148, 148, 148);
   cursor: default;
+}
+.ActiveUsers {
+  font-size: 2rem;
+  color: rgb(148, 148, 148);
 }

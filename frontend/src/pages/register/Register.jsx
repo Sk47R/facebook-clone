@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { registerAction } from "../../actions/registerAction";
+import { Link } from "react-router-dom";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -11,6 +12,9 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [city, setCity] = useState("");
+  const [location, setLocation] = useState("");
+  const [relation, setRelation] = useState("");
   const { user, error, loading } = useSelector((state) => state.register);
 
   const handleRegister = (e) => {
@@ -20,18 +24,22 @@ const Register = () => {
       return;
       // set a front end validation
     }
-    dispatch(registerAction(username, email, password));
+    dispatch(
+      registerAction(username, email, city, location, relation, password)
+    );
 
-    navigate("/login");
     setUsername("");
     setEmail("");
     setPassword("");
     setConfirmPassword("");
+    setLocation("");
+    setCity("");
+    setRelation("");
   };
 
   return (
     <div className="login">
-      <div className="loginWrapper">
+      <div className="registerWrapper">
         <div className="loginLeft">
           <h3 className="loginLogo">facebook</h3>
           <span className="loginDesc">
@@ -39,7 +47,7 @@ const Register = () => {
           </span>
         </div>
         <div className="loginRight">
-          <form onSubmit={handleRegister} className="loginBox">
+          <form onSubmit={handleRegister} className="registerBox">
             <input
               type="text"
               placeholder="Username"
@@ -49,6 +57,21 @@ const Register = () => {
               }}
               className="loginInput"
             />
+            {error?.username ? (
+              <p
+                style={{
+                  color: "red",
+                  marginLeft: "8px",
+                  fontSize: "1.2rem",
+                  marginBottom: ".4rem",
+                  marginTop: ".08rem",
+                }}
+              >
+                {error.username}
+              </p>
+            ) : (
+              ""
+            )}
             <input
               type="email"
               placeholder="Email"
@@ -58,6 +81,97 @@ const Register = () => {
               }}
               className="loginInput"
             />
+            {error?.email ? (
+              <p
+                style={{
+                  color: "red",
+                  marginLeft: "8px",
+                  fontSize: "1.2rem",
+                  marginBottom: ".4rem",
+                  marginTop: ".08rem",
+                }}
+              >
+                {error.email}
+              </p>
+            ) : (
+              ""
+            )}
+
+            <input
+              type="text"
+              placeholder="City"
+              className="loginInput"
+              value={city}
+              onChange={(e) => {
+                setCity(e.target.value);
+              }}
+            />
+            {error?.city ? (
+              <p
+                style={{
+                  color: "red",
+                  marginLeft: "8px",
+                  fontSize: "1.2rem",
+                  marginBottom: ".4rem",
+                  marginTop: ".08rem",
+                }}
+              >
+                {error.city}
+              </p>
+            ) : (
+              ""
+            )}
+
+            <input
+              type="text"
+              placeholder="Location"
+              className="loginInput"
+              value={location}
+              onChange={(e) => {
+                setLocation(e.target.value);
+              }}
+            />
+            {error?.location ? (
+              <p
+                style={{
+                  color: "red",
+                  marginLeft: "8px",
+                  fontSize: "1.2rem",
+                  marginBottom: ".4rem",
+                  marginTop: ".08rem",
+                }}
+              >
+                {error.location}
+              </p>
+            ) : (
+              ""
+            )}
+
+            <input
+              type="number"
+              placeholder="Relation (1: single, 2: couple, 3: complecated)"
+              className="loginInput"
+              value={relation}
+              onChange={(e) => {
+                setRelation(e.target.value);
+              }}
+            />
+            {error?.relation ? (
+              <p
+                style={{
+                  color: "red",
+                  marginLeft: "8px",
+                  fontSize: "1.2rem",
+                  marginBottom: ".4rem",
+                  marginTop: ".08rem",
+                }}
+              >
+                {error.relation}
+              </p>
+            ) : (
+              ""
+            )}
+
             <input
               type="password"
               placeholder="Password"
@@ -67,6 +181,22 @@ const Register = () => {
                 setPassword(e.target.value);
               }}
             />
+            {error?.password ? (
+              <p
+                style={{
+                  color: "red",
+                  marginLeft: "8px",
+                  fontSize: "1.2rem",
+                  marginBottom: ".4rem",
+                  marginTop: ".08rem",
+                }}
+              >
+                {error.password}
+              </p>
+            ) : (
+              ""
+            )}
+
             <input
               type="password"
               placeholder="Confirm Password"
@@ -78,7 +208,18 @@ const Register = () => {
             />
 
             <button className="loginButton">Sign Up</button>
-            <button className="loginRegisterButton">Log into Account</button>
+            <Link
+              to="/login"
+              className="loginRegisterButton"
+              style={{
+                textDecoration: "none",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              Log into Account
+            </Link>
           </form>
         </div>
       </div>

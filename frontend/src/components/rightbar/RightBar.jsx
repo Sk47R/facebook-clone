@@ -9,8 +9,10 @@ import { Add, Remove } from "@mui/icons-material";
 import { followFriendAction } from "../../actions/followUnfollow";
 import { unFollowFriendAction } from "../../actions/followUnfollow";
 import useTokenAndId from "../tokenFetch";
+import { useNavigate } from "react-router-dom";
 
 const RightBar = ({ user }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const PublicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
   const [friends, setFriends] = useState([]);
@@ -87,6 +89,22 @@ const RightBar = ({ user }) => {
       </>
     );
   };
+
+  const messageHandler = (senderId, receiverId) => {
+    axios
+      .post(`http://localhost:8800/api/conversations`, {
+        senderId,
+        receiverId,
+      })
+      .then((res) => {
+        console.log("conversation created");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    navigate("/messenger");
+  };
+  console.log(user);
   const ProfileRightBar = () => {
     return (
       <>
@@ -94,6 +112,16 @@ const RightBar = ({ user }) => {
           <button className="rightbarFollowButton" onClick={followHandler}>
             {followed ? "Unfollow" : "Follow"}
             {followed ? <Remove /> : <Add />}
+          </button>
+        )}
+        {user.username !== loggedUser.username && (
+          <button
+            className="rightbarFollowButton"
+            onClick={() => {
+              messageHandler(loggedUser._id, user._id);
+            }}
+          >
+            Message
           </button>
         )}
         <h4 className="rightbarTitle">User information</h4>
@@ -104,14 +132,14 @@ const RightBar = ({ user }) => {
           </div>
           <div className="rightbarInfoItem">
             <span className="rightbarInfoKey">From:</span>
-            <span className="rightbarInfoValue">{user.from}</span>
+            <span className="rightbarInfoValue">{user.location}</span>
           </div>
           <div className="rightbarInfoItem">
             <span className="rightbarInfoKey">Relationship:</span>
             <span className="rightbarInfoValue">
-              {user.relationship === 1
+              {user.relation === 1
                 ? "Single"
-                : user.relationship === 2
+                : user.relation === 2
                 ? "Married"
                 : ""}
             </span>

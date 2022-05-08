@@ -7,6 +7,7 @@ import useTokenAndId from "./components/tokenFetch";
 
 import { BrowserRouter } from "react-router-dom";
 import Messenger from "./pages/messenger/Messenger";
+import UserDetail from "./components/userDetail/UserDetail";
 
 function App() {
   console.log("render");
@@ -17,6 +18,7 @@ function App() {
         <Routes>
           <Route index path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/userDetails" element={<UserDetail />} />
           <Route
             path="/"
             element={!token ? <Navigate to="/login" /> : <Home />}

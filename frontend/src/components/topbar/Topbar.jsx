@@ -46,7 +46,12 @@ const Topbar = () => {
             <span className="topbarIconBadge">1</span>
           </div>
           <div className="topbarIconItem">
-            <Chat className="navIcons" />
+            <Link
+              to="/messenger"
+              style={{ textDecoration: "none", color: "white" }}
+            >
+              <Chat className="navIcons" />
+            </Link>
             <span className="topbarIconBadge">1</span>
           </div>
           <div className="topbarIconItem">

@@ -1,9 +1,21 @@
 const Conversation = require("../models/Conversation");
 
 exports.postNewConversation = async (req, res, next) => {
+  let convo = await Conversation.findOne({
+    members: [req.body.senderId, req.body.receiverId],
+  });
+  convo = await Conversation.findOne({
+    members: [req.body.receiverId, req.body.senderId],
+  });
+  console.log(convo);
+  if (convo) {
+    return;
+  }
+
   const newConversation = new Conversation({
     members: [req.body.senderId, req.body.receiverId],
   });
+
   try {
     const savedConversation = await newConversation.save();
     res.status(200).json(savedConversation);

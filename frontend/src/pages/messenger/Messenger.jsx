@@ -1,14 +1,25 @@
 import "./Messenger.css";
+
 import Topbar from "../../components/topbar/Topbar";
+
 import Conversation from "../../components/conversations/Conversation";
+
 import Message from "../../components/message/Message";
+
 import ChatOnline from "../../components/chatOnline/ChatOnline";
+
 import useTokenAndId from "../../components/tokenFetch";
+
 import { useEffect, useRef, useState } from "react";
+
 import { useDispatch, useSelector } from "react-redux";
+
 import { getConversationAction } from "../../actions/getConversationAction";
+
 import { getMessageAction } from "../../actions/getMessageAction";
+
 import axios from "axios";
+
 import { io } from "socket.io-client";
 
 const Messenger = () => {
@@ -17,22 +28,32 @@ const Messenger = () => {
   );
 
   const scrollRef = useRef();
+
   const [currentChat, setCurrentChat] = useState(null);
+
   const newMessage = useRef();
+
   const [arrivalMessage, setArrivalMessage] = useState(null);
+
   const [messages, setMessages] = useState([]);
+
   const dispatch = useDispatch();
+
   const socket = useRef();
 
   const { user, token } = useTokenAndId();
+
   const [onlineUsers, setOnlineUsers] = useState([]);
 
   useEffect(() => {
     socket.current = io("ws://localhost:8900");
+
     socket.current.on("getMessage", (data) => {
       setArrivalMessage({
         sender: data.senderId,
+
         text: data.text,
+
         createdAt: Date.now(),
       });
     });
@@ -43,8 +64,10 @@ const Messenger = () => {
       currentChat?.members.includes(arrivalMessage.sender) &&
       setMessages((prev) => [...prev, arrivalMessage]);
   }, [arrivalMessage, currentChat]);
+
   useEffect(() => {
     socket.current.emit("addUser", user._id);
+
     socket.current.on("getUsers", (users) => {
       setOnlineUsers(
         user.followings.filter((f) => users.some((u) => u.userId === f))
@@ -58,12 +81,16 @@ const Messenger = () => {
 
   useEffect(() => {
     const apiUrl = `http://localhost:8800/api/messages/${currentChat?._id}`;
+
     const getMessages = async (token) => {
       return axios({
         url: apiUrl,
+
         method: "GET",
+
         headers: {
           Accept: "application/json",
+
           Authorization: "Bearer " + token,
         },
       })
@@ -74,6 +101,7 @@ const Messenger = () => {
             console.log(response.data, "error");
           }
         })
+
         .catch((err) => {
           console.log(err);
         });
@@ -81,34 +109,45 @@ const Messenger = () => {
 
     getMessages(token);
   }, [currentChat]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     console.log("clicked");
+
     const message = {
       sender: user._id,
+
       text: newMessage.current.value,
+
       conversationId: currentChat._id,
     };
+
     const receiverId = currentChat.members.find(
       (member) => member !== user._id
     );
 
     socket.current.emit("sendMessage", {
       senderId: user._id,
+
       receiverId: receiverId,
+
       text: newMessage.current.value,
     });
 
     try {
       const res = await axios.post(
         `http://localhost:8800/api/messages`,
+
         message,
+
         {
           headers: {
             Authorization: "Bearer " + token,
           },
         }
       );
+      newMessage.current.value = "";
       setMessages([...messages, res.data]);
     } catch (err) {
       console.log(err);
@@ -118,17 +157,16 @@ const Messenger = () => {
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
   return (
     <>
       <Topbar />
+
       <div className="messenger">
         <div className="messengerLeft">
           <div className="messengerLeftWrapper">
-            <input
-              type="text"
-              placeholder="Search for firends"
-              className="messengerLeftWrapper__Input"
-            />
+            <h3 className="messengerLeftWrapper__Header">Your Conversations</h3>
+
             {loadingConversations ? (
               <h1>Loading...</h1>
             ) : (
@@ -138,6 +176,7 @@ const Messenger = () => {
                     <Conversation
                       conversation={conversation}
                       key={conversation._id}
+                      index={index}
                     />
                   </div>
                 );
@@ -145,6 +184,7 @@ const Messenger = () => {
             )}
           </div>
         </div>
+
         <div className="messengerCenter">
           <div className="messengerCenterWrapper">
             {currentChat ? (
@@ -166,12 +206,14 @@ const Messenger = () => {
                     <h2>No messages to show</h2>
                   )}
                 </div>
+
                 <div className="messengerCenterWrapperBottom">
                   <textarea
                     placeholder="write something..."
                     className="chatMessageInput"
                     ref={newMessage}
                   ></textarea>
+
                   <button onClick={handleSubmit} className="chatSubmitButton">
                     Send
                   </button>
@@ -184,14 +226,19 @@ const Messenger = () => {
             )}
           </div>
         </div>
+
         <div className="messengerRight">
           <div className="messengerRightWrapper">
-            <ChatOnline
-              onlineUsers={onlineUsers}
-              currentId={user._id}
-              setCurrentChat={setCurrentChat}
-              key={onlineUsers._id}
-            />
+            {onlineUsers.length > 0 ? (
+              <ChatOnline
+                onlineUsers={onlineUsers}
+                currentId={user._id}
+                setCurrentChat={setCurrentChat}
+                key={onlineUsers._id}
+              />
+            ) : (
+              <h2 className="ActiveUsers">No Active users</h2>
+            )}
           </div>
         </div>
       </div>

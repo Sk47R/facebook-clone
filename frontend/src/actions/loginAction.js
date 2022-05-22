@@ -21,7 +21,6 @@ export const loginAction = (
       .post(apiUrl, { email, password })
       .then((response) => {
         if (response.status == 200) {
-          console.log("login success");
           dispatch({ type: GET_LOGIN_USER_SUCCESS, user: response.data });
           setEmail("");
           setPassword("");

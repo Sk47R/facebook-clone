@@ -87,7 +87,7 @@ exports.postRegister = async (req, res, next) => {
             userId: user._id,
             email: user.email,
           },
-          "secretkey_dont_share",
+          process.env.SECRET_KEY,
           { expiresIn: "1h" }
         );
 
@@ -164,7 +164,7 @@ exports.postLogin = async (req, res, next) => {
             userId: loadedUser._id,
             email: loadedUser.email,
           },
-          "secretkey_dont_share",
+          process.env.SECRET_KEY,
           { expiresIn: "1h" }
         );
       } catch (err) {

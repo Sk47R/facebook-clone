@@ -52,8 +52,6 @@ app.use("/api/posts", postRoute);
 app.use("/api/conversations", conversationRoute);
 app.use("/api/messages", messageRoute);
 
-// app.use(express.static(path.join(__dirname, "public/images")));
-
 mongoose
   .connect(process.env.MONGO_URL)
   .then((result) => {

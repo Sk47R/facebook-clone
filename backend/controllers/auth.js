@@ -91,9 +91,6 @@ exports.postRegister = async (req, res, next) => {
           { expiresIn: "1h" }
         );
 
-        // res.status(201).json({
-        //   message: "User Registered",
-        //   user: { ...user, token: token },
         res.status(201).json({
           user: user,
           token: token,
@@ -103,10 +100,6 @@ exports.postRegister = async (req, res, next) => {
       }
     })
     .catch((err) => {
-      //   if (!err.statusCode) {
-      //     err.statusCode = 500;
-      //   }
-      //   next(err);
       console.log("error while registering user");
       res.status(500).json(err);
     });
@@ -156,7 +149,6 @@ exports.postLogin = async (req, res, next) => {
         // User entered wrong password
         res.status(400).json("Wrong Password");
       }
-      // password success now creating a token
       let token;
       try {
         token = jwt.sign(

@@ -6,7 +6,6 @@ import {
 import axios from "axios";
 
 export const getTimelinePost = (userId, token) => {
-  // 625af1a225bea36fc8b52e54
   return (dispatch) => {
     dispatch({ type: GET_TIMELINE_POST_BEGIN });
     const apiUrl = `http://localhost:8800/api/posts/timeline/${userId}`;

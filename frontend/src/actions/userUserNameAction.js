@@ -7,7 +7,6 @@ import {
 import axios from "axios";
 
 export const getUserUsernameAction = (username) => {
-  // 625af1a225bea36fc8b52e54
   return (dispatch) => {
     dispatch({ type: GET_USER_BY_USERNAME_BEGIN });
     const apiUrl = `http://localhost:8800/api/users?username=${username}`;

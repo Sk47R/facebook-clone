@@ -2,6 +2,8 @@
 
 - This is a simple facebook clone web app with functionality like user login, signup, basic CRUD operations, image upload and along with that you can chat with friends that you have followed. It is an application built with the MERN stack.
 
+NOTE: THIS IS NOT RESPONSIVE SO PLEASE TRY IN DESKTOP OR LAPTOP
+
 # Pre-requisite
 
 - Node.js

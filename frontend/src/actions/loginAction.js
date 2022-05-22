@@ -12,7 +12,6 @@ export const loginAction = (
   setEmail,
   setPassword
 ) => {
-  // 625af1a225bea36fc8b52e54
   return (dispatch) => {
     dispatch({ type: GET_LOGIN_USER_BEGIN });
     const apiUrl = `http://localhost:8800/api/auth/login`;

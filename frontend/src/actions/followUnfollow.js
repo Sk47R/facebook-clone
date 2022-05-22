@@ -12,8 +12,6 @@ import axios from "axios";
 export const followFriendAction = (userId, setFollowed) => {
   return (dispatch) => {
     dispatch({ type: GET_FOLLOW_FIREND_SUCCESS, payload: userId });
-    console.log("success");
-    // console.log("succes");
     setFollowed((prev) => !prev);
   };
 };

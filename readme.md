@@ -57,4 +57,4 @@ npm start
 ```
 
 ### Note:
-This project is not complete. There are plenty of things that can be added. But I want to make it simple for now. Might add some more later.
+This project is not complete. There are plenty of things that can be added. But I want to make it simple for now. Might add some more later. Feedback appreciated.
